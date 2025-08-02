@@ -1,10 +1,10 @@
 package com.ortecfinance.tasklist;
 
+import com.ortecfinance.tasklist.service.TaskService;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static java.lang.System.lineSeparator;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,7 +17,7 @@ public final class ApplicationTest {
 
     private final PipedInputStream outStream = new PipedInputStream();
     private final BufferedReader outReader = new BufferedReader(new InputStreamReader(outStream));
-    private final String today = LocalDate.now().format(TaskList.DATE_FORMAT);
+    private final String today = LocalDate.now().format(TaskService.DATE_FORMAT);
 
     private Thread applicationThread;
 
