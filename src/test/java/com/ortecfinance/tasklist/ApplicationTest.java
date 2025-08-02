@@ -3,6 +3,8 @@ package com.ortecfinance.tasklist;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static java.lang.System.lineSeparator;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,6 +17,7 @@ public final class ApplicationTest {
 
     private final PipedInputStream outStream = new PipedInputStream();
     private final BufferedReader outReader = new BufferedReader(new InputStreamReader(outStream));
+    private final String today = LocalDate.now().format(TaskList.DATE_FORMAT);
 
     private Thread applicationThread;
 
@@ -56,10 +59,10 @@ public final class ApplicationTest {
 
         execute("show");
         readLines(
-            "secrets",
-            "    [ ] 1: Eat more donuts.",
-            "    [ ] 2: Destroy all humans.",
-            ""
+                "secrets",
+                "    [ ] 1: Eat more donuts. ",
+                "    [ ] 2: Destroy all humans. ",
+                ""
         );
 
         execute("add project training");
@@ -78,18 +81,85 @@ public final class ApplicationTest {
         execute("show");
         readLines(
                 "secrets",
-                "    [x] 1: Eat more donuts.",
-                "    [ ] 2: Destroy all humans.",
+                "    [x] 1: Eat more donuts. ",
+                "    [ ] 2: Destroy all humans. ",
                 "",
                 "training",
-                "    [x] 3: Four Elements of Simple Design",
-                "    [ ] 4: SOLID",
-                "    [x] 5: Coupling and Cohesion",
-                "    [x] 6: Primitive Obsession",
-                "    [ ] 7: Outside-In TDD",
-                "    [ ] 8: Interaction-Driven Design",
+                "    [x] 3: Four Elements of Simple Design ",
+                "    [ ] 4: SOLID ",
+                "    [x] 5: Coupling and Cohesion ",
+                "    [x] 6: Primitive Obsession ",
+                "    [ ] 7: Outside-In TDD ",
+                "    [ ] 8: Interaction-Driven Design ",
                 ""
         );
+
+        execute("deadline 1 10-11-202");
+        readLines("Invalid date! Please enter a date in DD-MM-YYYY format => 10-11-202");
+
+        execute("deadline 1 10-11-2024");
+        execute("show");
+        readLines(
+                "secrets",
+                "    [x] 1: Eat more donuts. 10-11-2024",
+                "    [ ] 2: Destroy all humans. ",
+                "",
+                "training",
+                "    [x] 3: Four Elements of Simple Design ",
+                "    [ ] 4: SOLID ",
+                "    [x] 5: Coupling and Cohesion ",
+                "    [x] 6: Primitive Obsession ",
+                "    [ ] 7: Outside-In TDD ",
+                "    [ ] 8: Interaction-Driven Design ",
+                ""
+        );
+
+        execute("today");
+        readLines("No tasks found!!");
+
+        execute("deadline 1 " + today);
+        execute("today");
+        readLines(
+                "secrets",
+                "    [x] 1: Eat more donuts. " + today,
+                "");
+
+        execute("view-by-deadline");
+        readLines(today+ ":",
+                "secrets",
+                "    [x] 1: Eat more donuts. " + today,
+                "",
+                "--------",
+                "No Deadlines:",
+                "training",
+                "    [x] 3: Four Elements of Simple Design ",
+                "    [ ] 4: SOLID ",
+                "    [x] 5: Coupling and Cohesion ",
+                "    [x] 6: Primitive Obsession ",
+                "    [ ] 7: Outside-In TDD ",
+                "    [ ] 8: Interaction-Driven Design ",
+                "",
+                "secrets",
+                "    [ ] 2: Destroy all humans. ",
+                "",
+                "--------");
+
+        execute("clear-deadline 1");
+        execute("view-by-deadline");
+        readLines("No Deadlines:",
+                "training",
+                "    [x] 3: Four Elements of Simple Design ",
+                "    [ ] 4: SOLID ",
+                "    [x] 5: Coupling and Cohesion ",
+                "    [x] 6: Primitive Obsession ",
+                "    [ ] 7: Outside-In TDD ",
+                "    [ ] 8: Interaction-Driven Design ",
+                "",
+                "secrets",
+                "    [x] 1: Eat more donuts. ",
+                "    [ ] 2: Destroy all humans. ",
+                "",
+                "--------");
 
         execute("quit");
     }
