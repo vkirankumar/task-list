@@ -23,6 +23,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<String> addProject(@RequestBody String projectName) {
+        if (projectName == null) {
+            return ResponseEntity.badRequest().body("Invalid project name!!");
+        }
         taskService.addProject(projectName);
         return ResponseEntity.ok(String.format("Project %s created successfully", projectName));
     }

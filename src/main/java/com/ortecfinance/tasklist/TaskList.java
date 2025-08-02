@@ -110,7 +110,7 @@ public final class TaskList implements Runnable {
     }
 
     private void show(Map<String, List<Task>> data) {
-        Map<String, List<Task>> collection = data == null ? service.dataProvider : data;
+        Map<String, List<Task>> collection = data == null ? service.getProjects() : data;
         for (Map.Entry<String, List<Task>> project : collection.entrySet()) {
             out.println(project.getKey());
             for (Task task : project.getValue()) {
@@ -208,13 +208,13 @@ public final class TaskList implements Runnable {
     }
 
     private void addTestData() {
-        service.dataProvider.put("Daily Routine",
+        service.getProjects().put("Daily Routine",
                 List.of(new Task(1, "Breakfast", true, LocalDate.parse("10-11-2026", TaskService.DATE_FORMAT)),
                         new Task(2, "Lunch", false, LocalDate.parse("10-11-1986", TaskService.DATE_FORMAT)),
                         new Task(3, "Breakfast", false, LocalDate.now().minusDays(10)),
                         new Task(4, "Vitamin Supplement", false, LocalDate.now()),
                         new Task(5, "Brunch", true, null)));
-        service.dataProvider.put("Fitness",
+        service.getProjects().put("Fitness",
                 List.of(new Task(6, "Warm Up", true, LocalDate.parse("10-11-2024", TaskService.DATE_FORMAT)),
                         new Task(7, "Push Up", false, LocalDate.now()),
                         new Task(8, "Abs", false, null)));

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
-    public final Map<String, List<Task>> dataProvider = new LinkedHashMap<>();
+    private final Map<String, List<Task>> dataProvider = new LinkedHashMap<>();
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private long lastId = 0;
 
@@ -97,6 +97,10 @@ public class TaskService {
 
     public Map<String, List<Task>> getProjects() {
         return dataProvider;
+    }
+
+    public void setId(long id) {
+        this.lastId = id;
     }
 
     private long nextId() {
