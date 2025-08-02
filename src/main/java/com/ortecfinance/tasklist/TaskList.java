@@ -135,11 +135,14 @@ public final class TaskList implements Runnable {
 
     private void viewByDeadline() {
         Map<String, Map<String, List<Task>>> sortedData = service.sortByDeadLine();
-        sortedData.forEach((key, value) -> {
+        List<String> keys = sortedData.keySet().stream()
+                .filter(item -> !"".equals(item))
+                .map(str -> LocalDate.parse(str, TaskService.DATE_FORMAT))
+                .sorted().map(TaskService.DATE_FORMAT::format).toList();
+        keys.reversed().forEach((key) -> {
             if (!key.isEmpty()) {
-                //            out.printf("     ");
                 out.println(key + ":");
-                show(value);
+                show(sortedData.get(key));
                 out.println("--------");
             }
         });

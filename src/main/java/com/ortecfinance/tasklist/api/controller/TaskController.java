@@ -2,6 +2,8 @@ package com.ortecfinance.tasklist.api.controller;
 
 import com.ortecfinance.tasklist.model.Task;
 import com.ortecfinance.tasklist.service.TaskService;
+import com.ortecfinance.tasklist.validation.DateInputValid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addProject(@RequestBody String projectName) {
-        if (projectName == null) {
-            return ResponseEntity.badRequest().body("Invalid project name!!");
-        }
+    public ResponseEntity<String> addProject(@NotBlank @RequestBody String projectName) {
         taskService.addProject(projectName);
         return ResponseEntity.ok(String.format("Project %s created successfully", projectName));
     }
@@ -44,11 +43,11 @@ public class TaskController {
     }
 
     @PutMapping("/tasks/{taskId}/deadline")
-    public ResponseEntity<String> updateTaskDeadline(@PathVariable String taskId, @RequestBody String date) {
+    public ResponseEntity<String> updateTaskDeadline(@NotBlank @PathVariable String taskId, @RequestBody @DateInputValid String date) {
         if (taskService.setDeadLine(Integer.parseInt(taskId), date)) {
             return ResponseEntity.ok("Success");
         } else {
-            return ResponseEntity.badRequest().body("Invalid date or task id");
+            return ResponseEntity.badRequest().body("Invalid task id!");
         }
     }
 }

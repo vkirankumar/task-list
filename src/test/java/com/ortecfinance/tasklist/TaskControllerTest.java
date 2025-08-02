@@ -31,8 +31,8 @@ class TaskControllerTest {
 	@Autowired
 	TaskService taskService;
 
-	private final String GET_ALL_PROJECTS_RESPONSE = "{\"Daily Routine\":[{\"id\":1,\"description\":\"Breakfast\",\"done\":true,\"deadline\":\"2026-11-10\"},{\"id\":2,\"description\":\"Lunch\",\"done\":false,\"deadline\":\"1986-11-10\"},{\"id\":3,\"description\":\"Breakfast\",\"done\":false,\"deadline\":\"2025-07-23\"},{\"id\":4,\"description\":\"Vitamin Supplement\",\"done\":false,\"deadline\":\"2025-08-02\"},{\"id\":5,\"description\":\"Brunch\",\"done\":true,\"deadline\":null}],\"Fitness\":[{\"id\":6,\"description\":\"Warm Up\",\"done\":true,\"deadline\":\"2024-11-10\"},{\"id\":7,\"description\":\"Push Up\",\"done\":false,\"deadline\":\"2025-08-02\"},{\"id\":8,\"description\":\"Abs\",\"done\":false,\"deadline\":null}]}";
-	private final String GET_BY_DEADLINE_RESPONSE = "{\"\":{\"Fitness\":[{\"id\":8,\"description\":\"Abs\",\"done\":false,\"deadline\":null}]},\"10-11-2024\":{\"Fitness\":[{\"id\":6,\"description\":\"Warm Up\",\"done\":true,\"deadline\":\"2024-11-10\"}]},\"02-08-2025\":{\"Daily Routine\":[{\"id\":4,\"description\":\"Vitamin Supplement\",\"done\":false,\"deadline\":\"2025-08-02\"}],\"Fitness\":[{\"id\":7,\"description\":\"Push Up\",\"done\":false,\"deadline\":\"2025-08-02\"}]},\"10-11-2026\":{\"Daily Routine\":[{\"id\":1,\"description\":\"Breakfast\",\"done\":true,\"deadline\":\"2026-11-10\"}]},\"15-11-2025\":{\"Daily Routine\":[{\"id\":5,\"description\":\"Brunch\",\"done\":true,\"deadline\":\"2025-11-15\"}]},\"23-07-2025\":{\"Daily Routine\":[{\"id\":3,\"description\":\"Breakfast\",\"done\":false,\"deadline\":\"2025-07-23\"}]},\"10-11-1986\":{\"Daily Routine\":[{\"id\":2,\"description\":\"Lunch\",\"done\":false,\"deadline\":\"1986-11-10\"}]}}";
+	private final String GET_ALL_PROJECTS_RESPONSE = "{\"Daily Routine\":[{\"id\":1,\"description\":\"Breakfast\",\"done\":true,\"deadline\":\"2026-11-10\"},{\"id\":2,\"description\":\"Lunch\",\"done\":false,\"deadline\":\"1986-11-10\"},{\"id\":3,\"description\":\"Dinner\",\"done\":false,\"deadline\":\"2025-04-22\"},{\"id\":4,\"description\":\"Vitamin Supplement\",\"done\":false,\"deadline\":\"2025-05-31\"},{\"id\":5,\"description\":\"Brunch\",\"done\":true,\"deadline\":null}],\"Fitness\":[{\"id\":6,\"description\":\"Warm Up\",\"done\":true,\"deadline\":\"2024-11-10\"},{\"id\":7,\"description\":\"Push Up\",\"done\":false,\"deadline\":\"2024-12-30\"},{\"id\":8,\"description\":\"Abs\",\"done\":false,\"deadline\":null}]}";
+	private final String GET_BY_DEADLINE_RESPONSE = "{\"\":{\"Fitness\":[{\"id\":8,\"description\":\"Abs\",\"done\":false,\"deadline\":null}]},\"10-11-2024\":{\"Fitness\":[{\"id\":6,\"description\":\"Warm Up\",\"done\":true,\"deadline\":\"2024-11-10\"}]},\"31-05-2025\":{\"Daily Routine\":[{\"id\":4,\"description\":\"Vitamin Supplement\",\"done\":false,\"deadline\":\"2025-05-31\"}]},\"10-11-2026\":{\"Daily Routine\":[{\"id\":1,\"description\":\"Breakfast\",\"done\":true,\"deadline\":\"2026-11-10\"}]},\"15-11-2025\":{\"Daily Routine\":[{\"id\":5,\"description\":\"Brunch\",\"done\":true,\"deadline\":\"2025-11-15\"}]},\"30-12-2024\":{\"Fitness\":[{\"id\":7,\"description\":\"Push Up\",\"done\":false,\"deadline\":\"2024-12-30\"}]},\"10-11-1986\":{\"Daily Routine\":[{\"id\":2,\"description\":\"Lunch\",\"done\":false,\"deadline\":\"1986-11-10\"}]},\"22-04-2025\":{\"Daily Routine\":[{\"id\":3,\"description\":\"Dinner\",\"done\":false,\"deadline\":\"2025-04-22\"}]}}";
 	private final String API_PREFIX = "/projects";
 	private final String deadline = "15-11-2025";
 
@@ -119,13 +119,13 @@ class TaskControllerTest {
 		List<Task> tasks = new ArrayList<>();
 		tasks.add(new Task(1, "Breakfast", true, LocalDate.parse("10-11-2026", TaskService.DATE_FORMAT)));
 		tasks.add(new Task(2, "Lunch", false, LocalDate.parse("10-11-1986", TaskService.DATE_FORMAT)));
-		tasks.add(new Task(3, "Breakfast", false, LocalDate.now().minusDays(10)));
-		tasks.add(new Task(4, "Vitamin Supplement", false, LocalDate.now()));
+		tasks.add(new Task(3, "Dinner", false, LocalDate.parse("22-04-2025", TaskService.DATE_FORMAT)));
+		tasks.add(new Task(4, "Vitamin Supplement", false, LocalDate.parse("31-05-2025", TaskService.DATE_FORMAT)));
 		tasks.add(new Task(5, "Brunch", true, null));
 		taskService.getProjects().put("Daily Routine",tasks);
 		tasks = new ArrayList<>();
 		tasks.add(new Task(6, "Warm Up", true, LocalDate.parse("10-11-2024", TaskService.DATE_FORMAT)));
-		tasks.add(new Task(7, "Push Up", false, LocalDate.now()));
+		tasks.add(new Task(7, "Push Up", false, LocalDate.parse("30-12-2024", TaskService.DATE_FORMAT)));
 		tasks.add(new Task(8, "Abs", false, null));
 		taskService.getProjects().put("Fitness", tasks);
 		taskService.setId(8);
